@@ -9,18 +9,37 @@ from pyglet import clock
 
 import tank
 import chassis
+import turret
 
 class GameWindow(pyglet.window.Window):
     def __init__(self, *arg, **kwargs):
         super().__init__(*arg, **kwargs)
     
-    tank_1 = tank.Tank(200, 200)
-    print(type(tank_1.x))
+    player_tank = []
+    piece_of_tank = {}
+    tank_1 = tank.Tank(240, 300)
+    tu = turret.Turret(tank_1.x, tank_1.y)
+    ch = chassis.Chassis(tank_1.x, tank_1.y)
+
+    # Dict des instances du tank
+    piece_of_tank['tank'] = tank_1
+    piece_of_tank['turret'] = tu
+    piece_of_tank['chassis'] = ch
+
+    # Creation des sprites
+    chassis_1 = ch.create_chassis('assets/sprites/chassis_2.png')
+    turret_1 = tu.create_turret("assets/sprites/turret_2.png")
+
+    # liste des sprites
+    player_tank.append(chassis_1)
+    player_tank.append(turret_1)
+
 
     def on_draw(self): # Surcharge la methode de on_draw de la superclass pyglet.window.Window
         self.clear()
-        pass
-
+        # boucle sur liste des sprites
+        for t in self.player_tank:
+            t.draw()
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse_x = int(float(x))
@@ -43,9 +62,10 @@ class GameWindow(pyglet.window.Window):
         self.player.isKeyPressed = False
         self.direction = "none"
 
-    def update(self, dt):
-        pass
 
+    def update(self, dt):
+        self.tu.rotate(dt)
+        
     
 if __name__ == "__main__":
     window = GameWindow(800, 600, "Tank Yu", resizable=False)

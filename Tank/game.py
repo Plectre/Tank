@@ -10,8 +10,6 @@ from pyglet import clock
 
 sprites = []
 
-
-
 class GameWindow(pyglet.window.Window):
     def __init__(self, *arg, **kwargs):
         super().__init__(*arg, **kwargs)
@@ -32,6 +30,7 @@ class GameWindow(pyglet.window.Window):
     mob2 = TankFactory('assets/sprites/chassis_2.png', 'assets/sprites/turret_2.png')
     player.makeTank()
     sprites.append(player)
+    
 
     def on_draw(self): # Surcharge la methode de on_draw de la superclass pyglet.window.Window
         self.clear()
@@ -63,8 +62,10 @@ class GameWindow(pyglet.window.Window):
     def update(self, dt):
         self.player.rotation(self.mouse_x, self.mouse_y)
         self.player.direction(self.direction, dt)
+
     
 if __name__ == "__main__":
     window = GameWindow(800, 600, "Tank Yu", resizable=False)
-    pyglet.clock.schedule_interval(window.update, window.frame_rate)
+    clock.set_fps_limit(60)
+    pyglet.clock.schedule_interval(window.update, 1/60.0)
     pyglet.app.run()

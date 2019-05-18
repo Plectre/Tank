@@ -11,9 +11,10 @@ class TankFactory():
         self.tank = []
         self.pos_x = randint(50, 550)
         self.pos_y = 400
-        self.speed = 100
+        self.speed = 50
         self.isKeyPressed = False
         self.chassis_angle = 0
+        self.angle = 0
         pass
 
 
@@ -36,8 +37,8 @@ class TankFactory():
         self.tank[1].draw()
 
     def rotation(self, mouse_x, mouse_y):
-        angle = math.atan2(mouse_y - self.pos_y , mouse_x - self.pos_x)
-        rotation = (180 * angle / math.pi) * -1
+        self.angle = math.atan2(mouse_y - self.pos_y , mouse_x - self.pos_x)
+        rotation = (180 * self.angle / math.pi) * -1
         if rotation > 360:
             rotation = 0
         self.tank[1].rotation = rotation
@@ -45,10 +46,8 @@ class TankFactory():
     def direction(self, dir, dt):
         if self.isKeyPressed:
             if dir == 'head':
-                self.tank[0].y += (dt * self.speed) + math.sin(self.tank[0].rotation)
-                self.tank[0].x += (dt * self.speed) + math.cos(self.tank[0].rotation)
-                self.tank[1].y += (dt * self.speed) + math.sin(self.tank[0].rotation)
-                self.tank[1].x += (dt * self.speed) + math.cos(self.tank[0].rotation)
+                self.tank[0].y += dt * self.speed
+                self.tank[1].y += dt * self.speed
             if dir == 'back':
                 self.tank[0].y -= dt * self.speed
                 self.tank[1].y -= dt * self.speed
@@ -61,4 +60,4 @@ class TankFactory():
                 self.tank[0].rotation -= 2
                 if self.tank[0].rotation < 0:
                     self.tank[0].rotation = 359
-                print(self.tank[0].rotation)
+                #print(self.tank[0].rotation)
